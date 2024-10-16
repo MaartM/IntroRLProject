@@ -1,0 +1,5 @@
+from .maze_generator import get_maze, show_maze
+from .maze_environment import *
+
+__all__ = ['get_maze', 'show_maze']
+
