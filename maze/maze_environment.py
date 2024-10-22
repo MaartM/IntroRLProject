@@ -1,49 +1,47 @@
+class Maze:
+    def __init__(self, grid, start, goal, subgoal):
+        self.grid = grid
+        self.start = start
+        self.goal = goal
+        self.subgoal = subgoal
+        self.current_position = start
+        self.subgoal_reached = False
 
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
+    def reset(self):
+        self.current_position = self.start
+        return self.start
 
-def get_maze():
-    maze = [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 'S', 1, 0, 0, 0, 1, 0, 0, 1],
-        [1, 0, 1, 0, 1, 0, 1, 0, 1, 1],
-        [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-        [1, 1, 1, 0, 1, 1, 1, 1, 0, 1],
-        [1, 0, 1, 'G', 0, 0, 0, 1, 0, 1],
-        [1, 0, 0, 0, 1, 1, 0, 0, 0, 1],
-        [1, 1, 1, 0, 1, 0, 1, 1, 0, 1],
-        [1, 0, 0, 0, 0, 0, 1, 'E', 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-    ]
-    return maze
+    def move(self, action):
+        x, y = self.current_position
+        #1234 are w a s d in order
+        if action == 0:
+            y -= 1
+        elif action == 1:
+            x -= 1
+        elif action == 2:
+            y += 1
+        elif action == 3:
+            x += 1
+        if self.grid[y][x] == 1:
+            return self.current_position
+        else:
+            self.current_position = (x, y)
+            return self.current_position
 
-# Convert the maze into a numerical format for visualization
-def convert_maze(maze):
-    numerical_maze = np.zeros((len(maze), len(maze[0])), dtype=int)
-    for y, row in enumerate(maze):
-        for x, cell in enumerate(row):
-            if cell == 1:
-                numerical_maze[y, x] = 1
-            elif cell == 0:
-                numerical_maze[y, x] = 0
-            elif cell == 'S':
-                numerical_maze[y, x] = 2
-            elif cell == 'G':
-                numerical_maze[y, x] = 3
-            elif cell == 'E':
-                numerical_maze[y, x] = 4
-    return numerical_maze
+    def get_reward(self):
+        if self.current_position == self.goal:
+            if self.subgoal_reached:
+                return 20
+        elif self.current_position == self.subgoal and not self.subgoal_reached:
+            self.subgoal_reached = True
+            return 10
+        else:
+            return -1
 
-def show_maze(maze):
+    def step(self, action):
+        new_position = self.move(action)
+        reward = self.get_reward()
+        return new_position, reward
 
-    numerical_maze = convert_maze(maze)
-    cmap = mcolors.ListedColormap(['white', 'black', 'green', 'blue', 'red'])
-    bounds = [0, 1, 2, 3, 4, 5]  # Define the boundaries for the colors
-    norm = mcolors.BoundaryNorm(bounds, cmap.N)
-    
-    plt.imshow(numerical_maze, cmap=cmap, norm=norm, interpolation='nearest')
-    plt.xticks([])
-    plt.yticks([])
-    plt.title('Maze Representation')
-    plt.show()
+    def is_done(self):
+        return self.current_position == self.goal
