@@ -8,7 +8,7 @@ from utils.visualizer import *
 from agents.q_learning_agent import *
 
 def main():
-    maze = Maze(grid=CONFIG['grid'], start=CONFIG['start'], goal=CONFIG['goal'], subgoal=CONFIG['subgoal'])
+    maze = Maze(CONFIG)
 
     #start a testing input loop that the user will use to temporarily replace the agent for debug
     #allow user to input w, a, s, d to give the move command to the maze with constant input loop
@@ -22,11 +22,11 @@ def main():
 #        reward = maze.get_reward()
 #        print("Reward: ", reward)
 
-    agent = Agent(maze)
+    agent = Agent(maze, CONFIG)
 
     q_learning = QLearning(agent, maze)
 
-    q_learning.train(episodes=CONFIG['episodes'])
+    q_learning.train(CONFIG)
 
     q_learning.test()
 

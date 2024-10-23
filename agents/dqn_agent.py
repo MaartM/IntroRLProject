@@ -1,11 +1,11 @@
 import numpy as np
 
 class Agent:
-    def __init__(self, maze, epsilon=0.1, alpha=0.1, gamma=0.9):
+    def __init__(self, maze, config):
         self.maze = maze
-        self.epsilon = epsilon
-        self.alpha = alpha
-        self.gamma = gamma
+        self.epsilon = config['epsilon']
+        self.alpha = config['alpha']
+        self.gamma = config['gamma']
         self.action_space = [0, 1, 2, 3]
         self.state_space = len(self.maze.grid) * len(self.maze.grid[0])
 
@@ -16,3 +16,6 @@ class Agent:
         else:
             #print("exploiting")
             return np.argmax(q_table[state])
+
+    def decay_epsilon(self):
+        self.epsilon = self.epsilon * 0.99
