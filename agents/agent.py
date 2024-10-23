@@ -7,7 +7,7 @@ class Agent:
         self.alpha = config['alpha']
         self.gamma = config['gamma']
         self.action_space = [0, 1, 2, 3]
-        self.state_space = len(self.maze.grid) * len(self.maze.grid[0])
+        self.state_space = len(self.maze.grid) * len(self.maze.grid[0]) * 2
 
     def choose_action(self, state, q_table):
         if np.random.uniform(0, 1) < self.epsilon:

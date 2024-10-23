@@ -1,12 +1,14 @@
 import numpy as np
 from utils.visualizer import *
 
+def get_state_index(self, position):
+    return ((position[0] - 1) * len(self.maze.grid[0]) + position[1]) * (1 + self.maze.subgoal_reached)
+
 class QLearning:
     def __init__(self, agent, maze):
         self.agent = agent
         self.maze = maze
         self.q_table = np.zeros((self.agent.state_space, len(self.agent.action_space)))
-
 
     def train(self, config):
         episodes = config['episodes']
@@ -17,17 +19,19 @@ class QLearning:
         self.number_of_perfect_runs = 0
         self.average_score_first_fifth = 0
         self.average_score_last_fifth = 0
+        self.final_run_inputs = []
 
         for episode in range(episodes):
             self.maze.reset()
-            state = (self.maze.current_position[0] - 1) * len(self.maze.grid[0]) + self.maze.current_position[1]
+            state = get_state_index(self, self.maze.current_position)
             endreached = False
             total_reward = 0
 
             while not self.maze.is_done():
                 action = self.agent.choose_action(state, self.q_table)
                 next_state = self.maze.move(action)
-                next_state = (next_state[0] - 1) * len(self.maze.grid[0]) + next_state[1]
+                print(get_state_index(self, next_state))
+                next_state = get_state_index(self, next_state)
                 reward = self.maze.get_reward()
                 total_reward += reward
                 self.q_table[state][action] += self.agent.alpha * (reward + self.agent.gamma * np.max(self.q_table[next_state]) - self.q_table[state][action])
@@ -62,20 +66,26 @@ class QLearning:
 
     def test(self, config):
         self.maze.reset()
-        state = (self.maze.current_position[0] - 1) * len(self.maze.grid[0]) + self.maze.current_position[1]
+        state = get_state_index(self, self.maze.current_position)
         endreached = False
         total_reward = 0
         show_n = 0
+        if config['display_test_run']:
+            action_sequence = ""
         while not self.maze.is_done():
-            if show_n < 20 and config['display_test_run']:
-                show_maze(self.maze)
-                show_n += 1
             action = np.argmax(self.q_table[state])
+            if show_n < 30 and config['display_test_run']:
+                action_sequence += convert_input(action)
+                action_sequence += " "
+                show_maze(self.maze, action_sequence)
+                show_n += 1
             next_state = self.maze.move(action)
-            next_state = (next_state[0] - 1) * len(self.maze.grid[0]) + next_state[1]
+            next_state = get_state_index(self, next_state)
             reward = self.maze.get_reward()
             total_reward += reward
             state = next_state
+        if config['display_test_run']:
+            show_maze(self.maze, action_sequence)
         if total_reward <= (config['max_steps'] - 10) * -1:
             print("Failed to reach goal")
         else:
@@ -84,3 +94,4 @@ class QLearning:
                 print("Optimal Run: Yes")
             else:
                 print("Optimal Run: No")
+

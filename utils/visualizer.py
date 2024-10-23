@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
-def show_maze(maze):
+def show_maze(maze, input):
 
     numerical_maze = convert_maze(maze)
 
@@ -16,9 +16,11 @@ def show_maze(maze):
     plt.xticks([])
     plt.yticks([])
 
-    plt.title('Maze Representation')
+    plt.title('Input: ' + input)
 
-    plt.pause(0.1)
+    plt.pause(0.2)
+    if maze.is_done():
+        plt.pause(4)
 
 def convert_maze(maze):
     numerical_maze = np.zeros((len(maze.grid), len(maze.grid[0])), dtype=int)
@@ -37,3 +39,13 @@ def convert_maze(maze):
     x, y = maze.current_position
     numerical_maze[y, x] = 2
     return numerical_maze
+
+def convert_input(action):
+    if action == 0:
+        return 'w'
+    if action == 1:
+        return 'a'
+    if action == 2:
+        return 's'
+    if action == 3:
+        return 'd'

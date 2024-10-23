@@ -11,9 +11,6 @@ CONFIG = {
         [1, 0, 0, 0, 0, 0, 1, 'E', 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
     ],
-    'start': (1, 1),
-    'goal': (7, 8),
-    'subgoal': (3, 5),
 
     #at 100 episodes with 100 max steps, the algorirthm will complete the maze sometimes, but not all the time. at 1000 for both, it is relatively consistent.
     #17 is a perfect score for the maze
