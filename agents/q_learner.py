@@ -51,13 +51,14 @@ class QLearning:
 
 
             self.agent.decay_epsilon()
-
-        print("Average Reward: ", self.average_reward / episodes)
-        print("Number of Perfect Runs: ", self.number_of_perfect_runs)
-        print("Average Score First Fifth: ", self.average_score_first_fifth / (episodes / 5))
-        print("Average Score Last Fifth: ", self.average_score_last_fifth / (episodes / 5))
-        print("First Finished Run: ", self.first_finished_run)
-        print("First Perfect Run: ", self.first_perfect_run)
+        
+        if config['print_data_summary']:
+            print("Average Reward: ", self.average_reward / episodes)
+            print("Number of Perfect Runs: ", self.number_of_perfect_runs)
+            print("Average Score First Fifth: ", self.average_score_first_fifth / (episodes / 5))
+            print("Average Score Last Fifth: ", self.average_score_last_fifth / (episodes / 5))
+            print("First Finished Run: ", self.first_finished_run)
+            print("First Perfect Run: ", self.first_perfect_run)
 
     def test(self, config):
         self.maze.reset()
@@ -78,4 +79,8 @@ class QLearning:
         if total_reward <= (config['max_steps'] - 10) * -1:
             print("Failed to reach goal")
         else:
-            print("Test Reward: ", total_reward)
+            print("Final run Reward: ", total_reward)
+            if total_reward == 17:
+                print("Optimal Run: Yes")
+            else:
+                print("Optimal Run: No")
