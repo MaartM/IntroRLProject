@@ -11,10 +11,8 @@ class Agent:
 
     def choose_action(self, state, q_table):
         if np.random.uniform(0, 1) < self.epsilon:
-            #print("exploring")
             return np.random.choice(self.action_space)
         else:
-            #print("exploiting")
             return np.argmax(q_table[state])
 
     def decay_epsilon(self):

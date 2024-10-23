@@ -5,15 +5,20 @@ import matplotlib.colors as mcolors
 def show_maze(maze):
 
     numerical_maze = convert_maze(maze)
+
     cmap = mcolors.ListedColormap(['white', 'black', 'green', 'blue', 'red'])
     bounds = [0, 1, 2, 3, 4, 5]
     norm = mcolors.BoundaryNorm(bounds, cmap.N)
     
+    plt.clf()
     plt.imshow(numerical_maze, cmap=cmap, norm=norm, interpolation='nearest')
+
     plt.xticks([])
     plt.yticks([])
+
     plt.title('Maze Representation')
-    plt.show()
+
+    plt.pause(0.1)
 
 def convert_maze(maze):
     numerical_maze = np.zeros((len(maze.grid), len(maze.grid[0])), dtype=int)

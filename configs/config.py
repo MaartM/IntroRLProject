@@ -15,10 +15,15 @@ CONFIG = {
     'goal': (7, 8),
     'subgoal': (3, 5),
 
-    #at 100 episodes, the algorirthm will complete the maze sometimes, but not all the time. at 1000, it is relatively consistent.
+    #at 100 episodes with 100 max steps, the algorirthm will complete the maze sometimes, but not all the time. at 1000 for both, it is relatively consistent.
+    #17 is a perfect score for the maze
     'episodes': 1000,
     'max_steps': 1000,
     'alpha': 0.5,
     'gamma': 0.9,
-    'epsilon': 1
+    'epsilon': 1,
+
+    'display_test_run': True, # display the final run after training with the visualizer
+    'print_training_episode': False, #print the training episode number and total reward for the episode
+    'print_data_summary': True
 }
