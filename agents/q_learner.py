@@ -24,6 +24,8 @@ class QLearning:
         self.average_score_first_fifth = 0
         self.average_score_last_fifth = 0
         self.final_run_inputs = []
+        #variables for visualizer initialize_q_table_display(self.q_table)
+
 
         for episode in range(episodes):
             self.maze.reset()

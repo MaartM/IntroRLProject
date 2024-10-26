@@ -9,6 +9,7 @@ class Agent:
         self.gamma = config['gamma']
         self.action_space = [0, 1, 2, 3]
         self.state_space = len(self.maze.grid) * len(self.maze.grid[0]) * 2
+        self.epsilon_decay = config['epsilon_decay']
 
     def choose_action(self, state, q_table):
         if np.random.uniform(0, 1) < self.epsilon:
@@ -17,4 +18,4 @@ class Agent:
             return np.argmax(q_table[state])
 
     def decay_epsilon(self):
-        self.epsilon = self.epsilon * 0.99
+        self.epsilon = self.epsilon * self.epsilon_decay
