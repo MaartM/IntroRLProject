@@ -1,5 +1,6 @@
 import numpy as np
 
+#Agent class. Can choose an action based on the current epsilon, and decay said epsilon. Q-learning details are handled in q_learner
 class Agent:
     def __init__(self, maze, config):
         self.maze = maze

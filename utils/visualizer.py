@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
+#This is code to render the final run of the maze by the test function. It is fed a maze state and the input that was performed
 def show_maze(maze, input):
 
     numerical_maze = convert_maze(maze)
@@ -22,6 +23,7 @@ def show_maze(maze, input):
     if maze.is_done():
         plt.pause(4)
 
+#Convert maze from the string/grid representation into something that can be rendered (numerical representation only)
 def convert_maze(maze):
     numerical_maze = np.zeros((len(maze.grid), len(maze.grid[0])), dtype=int)
     for y, row in enumerate(maze.grid):

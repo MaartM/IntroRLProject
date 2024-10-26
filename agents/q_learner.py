@@ -1,3 +1,5 @@
+#Here are most of the details specific to q_learning. This way, the maze and agent can be adapted to a different algorithm if needed.
+
 import numpy as np
 from utils.visualizer import *
 
@@ -10,6 +12,8 @@ class QLearning:
         self.maze = maze
         self.q_table = np.zeros((self.agent.state_space, len(self.agent.action_space)))
 
+    #This is the training loop. Here we ask the maze to reset, reset the values we keep track of,
+    #and then loop through a training iteration. The q-table is not reset, most other things are.
     def train(self, config):
         episodes = config['episodes']
 
@@ -30,7 +34,6 @@ class QLearning:
             while not self.maze.is_done():
                 action = self.agent.choose_action(state, self.q_table)
                 next_state = self.maze.move(action)
-                print(get_state_index(self, next_state))
                 next_state = get_state_index(self, next_state)
                 reward = self.maze.get_reward()
                 total_reward += reward
@@ -55,7 +58,8 @@ class QLearning:
 
 
             self.agent.decay_epsilon()
-        
+ 
+        #Print details specific to the training. Useful for checking whether a certain epsilon, gamma, etc. is good.
         if config['print_data_summary']:
             print("Average Reward: ", self.average_reward / episodes)
             print("Number of Perfect Runs: ", self.number_of_perfect_runs)
@@ -64,6 +68,9 @@ class QLearning:
             print("First Finished Run: ", self.first_finished_run)
             print("First Perfect Run: ", self.first_perfect_run)
 
+    #Here we set the exploration rate to zero and then let the trained algorithm attempt to solve the maze.
+    #If the algorithm has not been sufficiently trained, the agent WILL get stuck in a loop here, because it can no longer break out
+    #of infinite loops by random chance exploration. This means that, even if the algorithm has finished once, the test might still fail.
     def test(self, config):
         self.maze.reset()
         state = get_state_index(self, self.maze.current_position)
@@ -86,12 +93,8 @@ class QLearning:
             state = next_state
         if config['display_test_run']:
             show_maze(self.maze, action_sequence)
-        if total_reward <= (config['max_steps'] - 10) * -1:
-            print("Failed to reach goal")
-        else:
-            print("Final run Reward: ", total_reward)
-            if total_reward == 17:
-                print("Optimal Run: Yes")
+        if config['print_data_summary']:
+            if total_reward <= (config['max_steps'] - 10) * -1:
+                print("Failed to reach goal")
             else:
-                print("Optimal Run: No")
-
+                print("Final run Reward: ", total_reward)

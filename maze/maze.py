@@ -1,4 +1,3 @@
-
 def find_position(self, symbol):
     for y, row in enumerate(self.grid):
         for x, cell in enumerate(row):
@@ -6,6 +5,7 @@ def find_position(self, symbol):
                 return (x, y)
     return None
 
+# Maze class. handles movement, rewards, and resetting itself for a new loop.
 class Maze:
     def __init__(self, config):
         self.grid = config['grid']
